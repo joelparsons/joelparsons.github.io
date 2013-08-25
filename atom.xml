@@ -4,7 +4,7 @@
   <title><![CDATA[joelparsons.net]]></title>
   <link href="http://joelparsons.github.io/atom.xml" rel="self"/>
   <link href="http://joelparsons.github.io/"/>
-  <updated>2013-08-25T14:31:15+01:00</updated>
+  <updated>2013-08-25T14:32:27+01:00</updated>
   <id>http://joelparsons.github.io/</id>
   <author>
     <name><![CDATA[Joel Parsons]]></name>
@@ -124,19 +124,11 @@
 
 <p>And thats it. Two simple functions achieve the objectives of the questions in 30 lines of code. For some interviewers this may be enough as this is considered to be the hard part of the question.</p>
 
-<h2>Complexity</h2>
-
-<p>No interview question is complete without a chat about complexity of the algoritm. The DFS is o(n) on the length of the word searched but generating the graph is going to be o(nm) on the size of the graph. The DFS approach will save the most time if the graph is reused multiple times for many searches once generated.</p>
-
-<p>While I&rsquo;ve been calling this a depth first search its actually more complicated than that.
-For starters we have a depth limit, which is the lenght of the word we are searching for in the boggle board. As the size of the graph inc
-similar to searching a trie when thingking about time complexity. In a typical depth first search you keep going deeping looking for a value in a final node. In our problem we dont need to progress down a path all the way to the depth</p>
-
 <h2>Going Further</h2>
 
 <p>There are several directions you could take this to make it more fully formed. For example, given a matrix of arrays could we build the graph? Also if were keeping the graph around it might make sense to make a graph object and make the search a method on a graph instance along with a graph generation method on the class. Ive tied it all together in a excerpt you can actually paste and run into an xcode command line app.</p>
 
-<figure class='code'><figcaption><span>main.m </span><a href='http://github.com'>&#8220;Github Gist&#8221; </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>main.m </span><a href='https://gist.github.com/joelparsons/5666671'>Github Gist </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
