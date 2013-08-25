@@ -9,7 +9,7 @@
   <meta name="author" content="Joel Parsons">
 
   
-  <meta name="description" content="Blog Archives Recent Posts GitHub Repos Status updating&#8230; @joelparsons on GitHub $(document).ready(function(){ if (!window.jXHR){ var jxhr = &hellip;">
+  <meta name="description" content="So I was looking into the &ldquo;Boggle Board&rdquo; question which is posted on several programming interview sites. The question is pretty straight &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -38,7 +38,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">joelparsons.net</a></h1>
   
-    <h2>A blogging framework for hackers.</h2>
+    <h2>iOS Developer Stuff</h2>
   
 </hgroup>
 
@@ -66,6 +66,164 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/25/the-boggle-board/">The Boggle Board Question</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T14:12:00+01:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I was looking into the &ldquo;Boggle Board&rdquo; question which is posted on several programming interview sites. The question is pretty straight forward even if you dont know the game &ldquo;boggle&rdquo; which it is based on. You have a nxm matrix of letters and the aim of the game is to make words from those letters. From any arbitraty starting letter you are allowed to travel from letter to letter in any direction including diagonals with the restriction that you cant use the same letter twice.</p>
+
+<p>The interview quetion usually asks candidates to to determine, given a 4x4 boggle board, whether a given word is in the board.</p>
+
+<p>The problem seems deceptively simple but the requirement that you mustnt revisit a letter means that any kind of recursive solution is going to have to keep track of a whole bunch of state and get messy really quickly.</p>
+
+<h2>Graph Search</h2>
+
+<p>The simplicity of a graph search based solution becomes apparent if you solve the meaty part of the problem first.</p>
+
+<p>To solve this problem with a graph search algorithm we need the letters in a graph. Lets create a node object that we can build a graph out of:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">Node</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span> <span class="n">letter</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSMutableSet</span> <span class="o">*</span> <span class="n">adjacentNodes</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We would create a &lsquo;Node *&rsquo; for each letter in the boggle board and then link it to the nodes that letter is adjacent to. There is now no need to store the Nodes in an array matrix that represents the board or anything like that as all the information about the board we need is encapsulated in these two pieces of data. Now assuming we can get the board represented in a bunch of &lsquo;Node&rsquo; objects all in an &lsquo;NSSet&rsquo; the algorithm for searching through them is relatively simple.</p>
+
+<p>We take each &lsquo;Node&rsquo; in turn and do a depth first search on its neighbours for a match for the next letter in the word we are checking for.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">BOOL</span> <span class="nf">searchForWord</span><span class="p">((</span><span class="n">NSString</span> <span class="err">\</span><span class="o">*</span><span class="p">)</span><span class="n">word</span><span class="p">,</span> <span class="n">NSSet</span> <span class="o">*</span> <span class="n">nodeGraph</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span> <span class="n">firstLetter</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%c&quot;</span><span class="p">,[</span><span class="n">word</span> <span class="nl">characterAtIndex:</span><span class="mi">0</span><span class="p">]];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">Node</span> <span class="o">*</span> <span class="n">node</span> <span class="k">in</span> <span class="n">nodeGraph</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">NSMutableSet</span> <span class="o">*</span> <span class="n">visitedNodes</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSMutableSet</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCapacity:</span><span class="n">word</span><span class="p">.</span><span class="n">length</span><span class="p">];</span>
+</span><span class='line'>        <span class="kt">BOOL</span> <span class="n">found</span> <span class="o">=</span> <span class="n">depthFirstSearch</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">visitedNodes</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">found</span><span class="p">)</span> <span class="k">return</span> <span class="n">found</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the &lsquo;depthFirstSearch&rsquo; function we need to do a few things.
+1. Keep track of visited Nodes so we don&rsquo;t visit the same one twice
+2. Keep track of depth so we know our position in the word
+3. Recursively search through the adjacent nodes</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">BOOL</span> <span class="nf">depthFirstSearch</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span> <span class="n">node</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span> <span class="n">word</span><span class="p">,</span> <span class="n">NSInteger</span> <span class="n">depth</span><span class="p">,</span> <span class="n">NSMutableSet</span> <span class="o">*</span> <span class="n">visitedNodes</span><span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">unichar</span> <span class="n">nodeLetter</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">letter</span> <span class="nl">characterAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">unichar</span> <span class="n">wordLetter</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="nl">characterAtIndex:</span><span class="n">depth</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">visitedNodes</span> <span class="nl">addObject:</span><span class="n">node</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">nodeLetter</span> <span class="o">==</span> <span class="n">wordLetter</span><span class="p">){</span>
+</span><span class='line'>        <span class="c1">//if we have a match and have letters left keep searching</span>
+</span><span class='line'>        <span class="c1">//else we are at the end of the word so return YES</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">depth</span> <span class="o">&lt;</span> <span class="n">word</span><span class="p">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="n">Node</span> <span class="o">*</span> <span class="n">adjacentNode</span> <span class="k">in</span> <span class="n">node</span><span class="p">.</span><span class="n">adjacentNodes</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">([</span><span class="n">visitedNodes</span> <span class="nl">containsObject:</span><span class="n">adjacentNode</span><span class="p">])</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">BOOL</span> <span class="n">found</span> <span class="o">=</span> <span class="n">depthFirstSearch</span><span class="p">(</span><span class="n">adjacentNode</span><span class="p">,</span> <span class="n">word</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">visitedNodes</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">found</span><span class="p">)</span> <span class="k">return</span> <span class="n">found</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">else</span> <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">visitedNodes</span> <span class="nl">removeObject:</span><span class="n">node</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And thats it. Two simple functions achieve the objectives of the questions in 30 lines of code. For some interviewers this may be enough as this is considered to be the hard part of the question.</p>
+
+<h2>Complexity</h2>
+
+<p>No interview question is complete without a chat about complexity of the algoritm. The DFS is o(n) on the length of the word searched but generating the graph is going to be o(nm) on the size of the graph. The DFS approach will save the most time if the graph is reused multiple times for many searches once generated.</p>
+
+<p>While I&rsquo;ve been calling this a depth first search its actually more complicated than that.
+For starters we have a depth limit, which is the lenght of the word we are searching for in the boggle board. As the size of the graph inc
+similar to searching a trie when thingking about time complexity. In a typical depth first search you keep going deeping looking for a value in a final node. In our problem we dont need to progress down a path all the way to the depth</p>
+
+<h2>Going Further</h2>
+
+<p>There are several directions you could take this to make it more fully formed. For example, given a matrix of arrays could we build the graph? Also if were keeping the graph around it might make sense to make a graph object and make the search a method on a graph instance along with a graph generation method on the class. Ive tied it all together in a excerpt you can actually paste and run into an xcode command line app.</p>
+
+<div><script src='https://gist.github.com/5666671.js'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -77,6 +235,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/25/the-boggle-board/">The Boggle Board Question</a>
+      </li>
     
   </ul>
 </section>
