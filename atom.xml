@@ -4,7 +4,7 @@
   <title><![CDATA[joelparsons.net]]></title>
   <link href="http://joelparsons.github.io/atom.xml" rel="self"/>
   <link href="http://joelparsons.github.io/"/>
-  <updated>2013-08-26T15:47:58+01:00</updated>
+  <updated>2013-08-26T15:50:42+01:00</updated>
   <id>http://joelparsons.github.io/</id>
   <author>
     <name><![CDATA[Joel Parsons]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<p><a href="http://krillapps.com/coderunner/">Code runner</a> (also available in the <a href="http://itunes.apple.com/us/app/coderunner/id433335799?mt=12">Mac App Store</a>) is a fantastic app that should be in every iOS and Mac developer&rsquo;s toolkit.</p>
 
 <p>If you are ever in the middle of a project and want to write a quick snippet to determine if an API is going to respond the way you think it will then Code Runner can help you out. Quite simply it sets up an environment where you can just start typing in your language of choice and, when you&rsquo;re ready to test, has a giant play button similar to Xcode that will run your code.</p>
+
+<!-- MORE -->
+
 
 <p>Heres an example from the other day. I wanted to do a check on the iOS system version for a very particular edge case and I was browsing through all the terrible and overly complicated comparison functions proffered in <a href="http://stackoverflow.com/questions/3339722/check-iphone-ios-version">this Stack Overflow Question</a> and came across the option of using the built in <code>NSNumericSearch</code> option for <code>compare:options:</code>. I wanted to verify this method would work correctly with different version numbers so I fired up code runner and tried out this small programme with a few different version numbers</p>
 
@@ -150,6 +153,9 @@
     <updated>2013-06-25T14:12:00+01:00</updated>
     <id>http://joelparsons.github.io/blog/2013/06/25/the-boggle-board</id>
     <content type="html"><![CDATA[<p>So I was looking into the &ldquo;Boggle Board&rdquo; question which is posted on several programming interview sites. The question is pretty straight forward even if you dont know the game &ldquo;boggle&rdquo; which it is based on. You have a nxm matrix of letters and the aim of the game is to make words from those letters. From any arbitraty starting letter you are allowed to travel from letter to letter in any direction including diagonals with the restriction that you cant use the same letter twice.</p>
+
+<!-- MORE -->
+
 
 <p>The interview quetion usually asks candidates to to determine, given a 4x4 boggle board, whether a given word is in the board.</p>
 
