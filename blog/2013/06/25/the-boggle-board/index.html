@@ -115,9 +115,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>We would create a &lsquo;Node *&rsquo; for each letter in the boggle board and then link it to the nodes that letter is adjacent to. There is now no need to store the Nodes in an array matrix that represents the board or anything like that as all the information about the board we need is encapsulated in these two pieces of data. Now assuming we can get the board represented in a bunch of &lsquo;Node&rsquo; objects all in an &lsquo;NSSet&rsquo; the algorithm for searching through them is relatively simple.</p>
+<p>We would create a <code>Node \*</code> for each letter in the boggle board and then link it to the nodes that letter is adjacent to. There is now no need to store the Nodes in an array matrix that represents the board or anything like that as all the information about the board we need is encapsulated in these two pieces of data. Now assuming we can get the board represented in a bunch of <code>Node</code> objects all in an <code>NSSet</code> the algorithm for searching through them is relatively simple.</p>
 
-<p>We take each &lsquo;Node&rsquo; in turn and do a depth first search on its neighbours for a match for the next letter in the word we are checking for.</p>
+<p>We take each <code>Node</code> in turn and do a depth first search on its neighbours for a match for the next letter in the word we are checking for.</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -142,7 +142,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>For the &lsquo;depthFirstSearch&rsquo; function we need to do a few things.
+<p>For the <code>depthFirstSearch</code> function we need to do a few things.
 1. Keep track of visited Nodes so we don&rsquo;t visit the same one twice
 2. Keep track of depth so we know our position in the word
 3. Recursively search through the adjacent nodes</p>
@@ -508,6 +508,8 @@
     <p class="meta">
       
       
+        <a class="basic-alignment right" href="/blog/2013/08/26/code-runner/" title="Next Post: Code Runner">Code Runner &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -520,6 +522,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/26/code-runner/">Code Runner</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/06/25/the-boggle-board/">The Boggle Board Question</a>

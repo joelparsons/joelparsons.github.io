@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tools | joelparsons.net]]></title>
+  <link href="http://joelparsons.github.io/blog/categories/tools/atom.xml" rel="self"/>
+  <link href="http://joelparsons.github.io/"/>
+  <updated>2013-08-26T15:13:00+01:00</updated>
+  <id>http://joelparsons.github.io/</id>
+  <author>
+    <name><![CDATA[Joel Parsons]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Code Runner]]></title>
+    <link href="http://joelparsons.github.io/blog/2013/08/26/code-runner/"/>
+    <updated>2013-08-26T14:35:00+01:00</updated>
+    <id>http://joelparsons.github.io/blog/2013/08/26/code-runner</id>
+    <content type="html"><![CDATA[<p><a href="http://krillapps.com/coderunner/">Code runner</a> (also available in the <a href="http://itunes.apple.com/us/app/coderunner/id433335799?mt=12">Mac App Store</a>) is a fantastic app that should be in every iOS and Mac developer&rsquo;s toolkit.</p>
+
+<p>If you are ever in the middle of a project and want to write a quick snippet to determine if an API is going to respond the way you think it will then Code Runner can help you out. Quite simply it sets up an environment where you can just start typing in your language of choice and, when you&rsquo;re ready to test, has a giant play button similar to Xcode that will run your code.</p>
+
+<p>Heres an example from the other day. I wanted to do a check on the iOS system version for a very particular edge case and I was browsing through all the terrible and overly complicated comparison functions proffered in <a href="http://stackoverflow.com/questions/3339722/check-iphone-ios-version">this Stack Overflow Question</a> and came across the option of using the built in <code>NSNumericSearch</code> option for <code>compare:options:</code>. I wanted to verify this method would work correctly with different version numbers so I fired up code runner and tried out this small programme with a few different version numbers</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">Foundation</span><span class="o">/</span><span class="n">Foundation</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">@</span><span class="n">autoreleasepool</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span> <span class="n">version1</span> <span class="o">=</span> <span class="s">@&quot;1.9.1&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span> <span class="n">version2</span> <span class="o">=</span> <span class="s">@&quot;1.100.1&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSComparisonResult</span> <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">version1</span> <span class="nl">compare:</span><span class="n">version2</span> <span class="nl">options:</span><span class="n">NSNumericSearch</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">NSOrderedAscending</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Ascending&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">NSOrderedSame</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Same&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Decending&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Very quickly I had determined that the option worked as advertised and was able to include it in my code with the relevant test cases.</p>
+
+<h2>Debugging</h2>
+
+<p>If you make a typo in Code Runner it can be hard to debug as you dont necessarily get a stack trace or other information on code crash. Luckily Code Runner has the option to add custom running environments to its editor and by duplicating and slightly tweaking the existing objective-c template I was able to make it run the code in the lldb debugger.</p>
+
+<p><img src="%20/images/lldb.jpg" title="" alt="configuration for running with the lldb debugger" /></p>
+
+<p>When you click the play button it fires up lldb and will load your executable. To run you can type r and hit return. You can also use all the other lldb commands you would expect like add breakpoints and inspect variables at runtime. Its not as nice as the interface in Xcode but the liklihood is that the issues you will encounter wont be as hard to debug!</p>
+
+<h2>Classes, Protocols, Categories and more</h2>
+
+<p>I&rsquo;m not sure its widely known that we keep our classes in separate files out of convention rather than necessity but with this knowledge your use of Code Runner can become quite advanced indeed. It can be used to prototype classes and methods on those classes that can quickly be integrated into a larger application. It can even be handy if practising computer science style challenges.</p>
+
+<p>Heres an example where I was practising determining if a string was a permutation of another string. This is more of a trick question as once you realise that all permutations of any particular string are contained in a doubled version of that string the implementation is straightforward. Here I&rsquo;ve implemented the check in code runner but as a category method on <code>NSString</code></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">Foundation</span><span class="o">/</span><span class="n">Foundation</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@interface</span> <span class="nc">NSString</span> <span class="nl">(permutation)</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isPermutationOfString:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">string</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">NSString</span> <span class="nl">(permutation)</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">isPermutationOfString:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">string</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSString</span> <span class="o">*</span> <span class="n">doubleSelf</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nl">stringByAppendingString:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">doubleSelf</span> <span class="nl">rangeOfString:</span><span class="n">string</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">range</span><span class="p">.</span><span class="n">location</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">@</span><span class="n">autoreleasepool</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span> <span class="n">permutation</span> <span class="o">=</span> <span class="s">@&quot;elloh&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">NSString</span> <span class="o">*</span> <span class="n">test</span> <span class="o">=</span> <span class="s">@&quot;hello&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,[</span><span class="n">permutation</span> <span class="nl">isPermutationOfString:</span><span class="n">test</span><span class="p">]</span> <span class="o">?</span> <span class="s">@&quot;YES&quot;</span> <span class="o">:</span> <span class="s">@&quot;NO&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So I reccommend you check out Code Runner. Its well worth the money and it can save you time with your development.</p>
+]]></content>
+  </entry>
+  
+</feed>
