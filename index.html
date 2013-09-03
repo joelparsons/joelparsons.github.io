@@ -9,7 +9,7 @@
   <meta name="author" content="Joel Parsons">
 
   
-  <meta name="description" content="Code runner (also available in the Mac App Store) is a fantastic app that should be in every iOS and Mac developer&rsquo;s toolkit. If you are ever &hellip;">
+  <meta name="description" content="Working with core data on multiple threads can be challenging, as can working across multiple threads in general, but the privateQueueContext method &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Background Core Data With privateQueueContext</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T09:00:00+01:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working with core data on multiple threads can be challenging, as can working across multiple threads in general, but the privateQueueContext method hasn&rsquo;t been as talked about as some of the other methods.</p>
+
+<h2>privateQueueContext</h2>
+
+<p>The old model with <code>NSManagedObjectContext</code> was that you had to create a context on every thread you were going to access core data on. When this context was saved it would write back to the persistent store and notifications would fire that would allow you to update your other contexts on other threads.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -174,6 +219,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Background core data with privateQueueContext</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/26/code-runner/">Code Runner</a>
