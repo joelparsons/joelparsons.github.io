@@ -4,7 +4,7 @@
   <title><![CDATA[joelparsons.net]]></title>
   <link href="http://joelparsons.github.io/atom.xml" rel="self"/>
   <link href="http://joelparsons.github.io/"/>
-  <updated>2013-09-09T22:26:03+01:00</updated>
+  <updated>2013-09-09T22:32:45+01:00</updated>
   <id>http://joelparsons.github.io/</id>
   <author>
     <name><![CDATA[Joel Parsons]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Queue Observer Pattern]]></title>
-    <link href="http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern/"/>
-    <updated>2013-09-04T00:28:00+01:00</updated>
-    <id>http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern</id>
+    <link href="http://joelparsons.github.io/blog/2013/09/09/the-queue-observer-pattern/"/>
+    <updated>2013-09-09T00:28:00+01:00</updated>
+    <id>http://joelparsons.github.io/blog/2013/09/09/the-queue-observer-pattern</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been using the &ldquo;new&rdquo; block based <code>NSNotificationCenter</code> addObserver methods for a long time now but I&rsquo;ve come across some projects that use the old target action style notifiction listening so I thought I would post about why I believe this newer method is better.</p>
 
 <!-- MORE -->
