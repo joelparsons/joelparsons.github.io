@@ -106,6 +106,9 @@
 
 <div class="entry-content"><p>I&rsquo;ve been using the &ldquo;new&rdquo; block based <code>NSNotificationCenter</code> addObserver methods for a long time now but I&rsquo;ve come across some projects that use the old target action style notifiction listening so I thought I would post about why I believe this newer method is better.</p>
 
+<!-- MORE -->
+
+
 <p>To recap the old way of subscribing to <code>NSNotifications</code> from an <code>NSNotificationCenter</code> was like this:</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -121,7 +124,7 @@
 
 <p>This method is not without its problems in the current versions of Xcode. For example if one was to use the Refactor Rename tool it doesn&rsquo;t automatically rename the selector in the <code>@selector()</code> block. Currently Xcode only suggests the changes.</p>
 
-<p><img src="/images/callers_menu.png" title="" alt="The callers menu" /></p>
+<p><img src="/images/callers_list.png" title="" alt="The callers menu" /></p>
 
 <p>Secondly you will appear to have a dead method when using the Xcode Callers list. The Callers list shows all the methods across the project that call that particular selector. When set as the selector of a notification it wont show in the callers list. While it may be obvious you intend the method to fire as a result of a notification you would still have to search for the notification listening code to find out if it existed and the <code>:(NSNotification *)</code> parameter is optional.</p>
 
