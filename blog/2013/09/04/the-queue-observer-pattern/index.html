@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>joelparsons.net</title>
+  <title>The Queue Observer Pattern - joelparsons.net</title>
   <meta name="author" content="Joel Parsons">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joelparsons.github.io">
+  <link rel="canonical" href="http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="joelparsons.net" type="application/atom+xml">
@@ -76,15 +76,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/09/04/the-queue-observer-pattern/">The Queue Observer Pattern</a></h1>
+      <h1 class="entry-title">The Queue Observer Pattern</h1>
     
     
       <p class="meta">
@@ -107,7 +104,7 @@
   </header>
 
 
-  <div class="entry-content"><p>I&rsquo;ve been using the &ldquo;new&rdquo; block based <code>NSNotificationCenter</code> addObserver methods for a long time now but I&rsquo;ve come across some projects that use the old target action style notifiction listening so I thought I would post about why I believe this newer method is better.</p>
+<div class="entry-content"><p>I&rsquo;ve been using the &ldquo;new&rdquo; block based <code>NSNotificationCenter</code> addObserver methods for a long time now but I&rsquo;ve come across some projects that use the old target action style notifiction listening so I thought I would post about why I believe this newer method is better.</p>
 
 <p>To recap the old way of subscribing to <code>NSNotifications</code> from an <code>NSNotificationCenter</code> was like this:</p>
 
@@ -199,67 +196,16 @@
 
 <p>Its good to try new things so give the new Notification syntax a try today!</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Background Core Data With privateQueueContext</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Joel Parsons</span></span>
 
-<time datetime="2013-09-02T09:00:00+01:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Working with core data on multiple threads can be challenging, as can working across multiple threads in general, but the privateQueueContext method hasn&rsquo;t been as talked about as some of the other methods.</p>
-
-<h2>privateQueueContext</h2>
-
-<p>The old model with <code>NSManagedObjectContext</code> was that you had to create a context on every thread you were going to access core data on. When this context was saved it would write back to the persistent store and notifications would fire that would allow you to update your other contexts on other threads.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/26/code-runner/">Code Runner</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -271,75 +217,39 @@
   
 
 
-<time datetime="2013-08-26T14:35:00+01:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://krillapps.com/coderunner/">Code runner</a> (also available in the <a href="http://itunes.apple.com/us/app/coderunner/id433335799?mt=12">Mac App Store</a>) is a fantastic app that should be in every iOS and Mac developer&rsquo;s toolkit.</p>
-
-<p>If you are ever in the middle of a project and want to write a quick snippet to determine if an API is going to respond the way you think it will then Code Runner can help you out. Quite simply it sets up an environment where you can just start typing in your language of choice and, when you&rsquo;re ready to test, has a giant play button similar to Xcode that will run your code.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/26/code-runner/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2013-09-04T00:28:00+01:00" pubdate data-updated="true">Sep 4<span>th</span>, 2013</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/25/the-boggle-board/">The Boggle Board Question</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/nsnotification/'>NSNotification</a>, <a class='category' href='/blog/categories/nsnotificationcenter/'>NSNotificationCenter</a>, <a class='category' href='/blog/categories/queues/'>queues</a>, <a class='category' href='/blog/categories/threads/'>threads</a>
+  
+</span>
 
 
-<time datetime="2013-06-25T14:12:00+01:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
-        
-      </p>
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern/" data-via="jackslash" data-counturl="http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/" title="Previous Post: Background core data with privateQueueContext">&laquo; Background core data with privateQueueContext</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-  <div class="entry-content"><p>So I was looking into the &ldquo;Boggle Board&rdquo; question which is posted on several programming interview sites. The question is pretty straight forward even if you dont know the game &ldquo;boggle&rdquo; which it is based on. You have a nxm matrix of letters and the aim of the game is to make words from those letters. From any arbitraty starting letter you are allowed to travel from letter to letter in any direction including diagonals with the restriction that you cant use the same letter twice.</p>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/25/the-boggle-board/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -368,7 +278,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/joelparsons">@joelparsons</a> on GitHub
@@ -400,6 +310,7 @@
 
   
 </aside>
+
 
     </div>
   </div>

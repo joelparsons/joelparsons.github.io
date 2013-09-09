@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: queues | joelparsons.net]]></title>
+  <link href="http://joelparsons.github.io/blog/categories/queues/atom.xml" rel="self"/>
+  <link href="http://joelparsons.github.io/"/>
+  <updated>2013-09-09T22:20:19+01:00</updated>
+  <id>http://joelparsons.github.io/</id>
+  <author>
+    <name><![CDATA[Joel Parsons]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Queue Observer Pattern]]></title>
+    <link href="http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern/"/>
+    <updated>2013-09-04T00:28:00+01:00</updated>
+    <id>http://joelparsons.github.io/blog/2013/09/04/the-queue-observer-pattern</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been using the &ldquo;new&rdquo; block based <code>NSNotificationCenter</code> addObserver methods for a long time now but I&rsquo;ve come across some projects that use the old target action style notifiction listening so I thought I would post about why I believe this newer method is better.</p>
+
+<p>To recap the old way of subscribing to <code>NSNotifications</code> from an <code>NSNotificationCenter</code> was like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">NotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver:</span><span class="n">self</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                                 <span class="nl">selector:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">someSelector:</span><span class="p">)</span>
+</span><span class='line'>                                     <span class="nl">name:</span><span class="n">NSSomeNotificationName</span>
+</span><span class='line'>                                   <span class="nl">object:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This method is not without its problems in the current versions of Xcode. For example if one was to use the Refactor Rename tool it doesn&rsquo;t automatically rename the selector in the <code>@selector()</code> block. Currently Xcode only suggests the changes.</p>
+
+<p><img src="%20/images/callers_menu.png" title="" alt="The callers menu" /></p>
+
+<p>Secondly you will appear to have a dead method when using the Xcode Callers list. The Callers list shows all the methods across the project that call that particular selector. When set as the selector of a notification it wont show in the callers list. While it may be obvious you intend the method to fire as a result of a notification you would still have to search for the notification listening code to find out if it existed and the <code>:(NSNotification *)</code> parameter is optional.</p>
+
+<p>Thirdly this method is more crash prone. If the observer is deallocated without you calling <code>[[NSNotificationCenter defaultCenter] removeObserver:self];</code> your app will crash. Admittedly in the scope of <code>NSNotificationCenter</code> observers this can be a good thing, alerting the programmer to a forgotten call to <code>removeObserver:</code> but its not a good bug to have slip through QA and land infront of users when theres an alternative that can fail silently.</p>
+
+<h2>The Modern Way</h2>
+
+<p>So the &ldquo;new&rdquo; alternative (Available in iOS 4.0 and later) is the following:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="kt">id</span> <span class="n">observer</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserverForName:</span><span class="n">NSSomeNotificationName</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                                                            <span class="nl">object:</span><span class="n">self</span>
+</span><span class='line'>                                                             <span class="nl">queue:</span><span class="p">[</span><span class="n">NSOperationQueue</span> <span class="n">mainQueue</span><span class="p">]</span>
+</span><span class='line'>                                                        <span class="nl">usingBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSNotification</span> <span class="o">*</span><span class="n">note</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>                                                            <span class="p">}];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The first thing you might notice is that you supply a block that is invoked when the notification is fired. You can also specify a queue for this to be executed on. Compared to the old method which will call all observers in turn and wait for their methods to finish before calling the next one queueing these blocks will exit immeadiately, even when queued to run on the main thread. If you know the work in the block will take time you can even farm it off to another queue right in the listener method.</p>
+
+<p>But what about that wierd observer object. The method returns an object of opaque, unspecified type that you have to keep around. The reason is that your class is no longer the observer here, the returned object is! This is why this new method can fail silently if the end recipient of these notifications, <code>self</code>, gets deallocated without calling <code>removeObserver:</code>, the new observer object is actually retained by the notification center and will stay around.</p>
+
+<h3>Caveats</h3>
+
+<p>There are things you need to know to use this new method. First of all that observer object is your responsibility. You have to keep a reference to it around and eventually remove it from the NSNotificationCenter by calling <code>[[NSNotificationCenter defaultCenter] removeObserver:observer];</code>. I like to have a lazily created mutable array that I use to store observers, and then I can unsubscribe from them all in one go when needed using something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">for</span> <span class="p">(</span><span class="kt">id</span> <span class="n">observer</span> <span class="k">in</span> <span class="n">self</span><span class="p">.</span><span class="n">observers</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">removeObserver:</span><span class="n">observer</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">observers</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The second caveat is down to block memory semantics. That block behaves like all others and retains everything in its scope. This means that if you rely on removing observers in the dealloc method, for example, it may never get called. It also means that, if you forget to remove the observer, whatever you reference in that block will be retained, sit there in memory and potentially execute its code in total isolation. This can cause untold trouble and hard to debug problems. The solution is to make sure that all references to self in the block are weak:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">__weak</span> <span class="n">JPCloudViewController</span> <span class="o">*</span> <span class="n">weakself</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="kt">id</span> <span class="n">observer</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span>
+</span><span class='line'>                <span class="nl">addObserverForName:</span><span class="n">UIApplicationDidEnterBackgroundNotification</span>
+</span><span class='line'>                <span class="nl">object:</span><span class="nb">nil</span>
+</span><span class='line'>                <span class="nl">queue:</span><span class="p">[</span><span class="n">NSOperationQueue</span> <span class="n">mainQueue</span><span class="p">]</span>
+</span><span class='line'>                <span class="nl">usingBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSNotification</span> <span class="o">*</span><span class="n">note</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">weakself</span><span class="p">.</span><span class="n">cloudContainerView</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">observers</span> <span class="nl">addObject:</span><span class="n">observer</span><span class="p">];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Now if the notification is fired and your object is released all the references to self will be nil and nothing will happen. No crashes or anything.</p>
+
+<h2>So why is it better?</h2>
+
+<p>Finally heres why I think the new syntax is better. Firstly programmer error will not cause a crash for users. Arguably it would be better to know about programmer error but I think an a memory leak is a better experience than a crash for the end user. You define the code to execute where you listen for the notificaion. The Xcode refactor tools work properly with the code in the block. The Callers list also shows correctly for functions called from the block. Code is guaranteed to run on the queue you specify, unlike the older style of notificaion where your code would run on the same thread that posted the notification. I also like the way blocks can be offloaded to background threads with ease.</p>
+
+<p>Its good to try new things so give the new Notification syntax a try today!</p>
+]]></content>
+  </entry>
+  
+</feed>
