@@ -4,7 +4,7 @@
   <title><![CDATA[Category: threads | joelparsons.net]]></title>
   <link href="http://joelparsons.github.io/blog/categories/threads/atom.xml" rel="self"/>
   <link href="http://joelparsons.github.io/"/>
-  <updated>2013-09-09T22:32:45+01:00</updated>
+  <updated>2013-09-10T11:00:44+01:00</updated>
   <id>http://joelparsons.github.io/</id>
   <author>
     <name><![CDATA[Joel Parsons]]></name>
@@ -45,9 +45,11 @@
 
 <p>This method is not without its problems in the current versions of Xcode. For example if one was to use the Refactor Rename tool it doesn&rsquo;t automatically rename the selector in the <code>@selector()</code> block. Currently Xcode only suggests the changes.</p>
 
-<p><img src="%20/images/callers_list.png" title="" alt="The callers menu" /></p>
+<p><img src="%20/images/refactor.png" title="" alt="Refactor Rename not picking up selector automatically" /></p>
 
 <p>Secondly you will appear to have a dead method when using the Xcode Callers list. The Callers list shows all the methods across the project that call that particular selector. When set as the selector of a notification it wont show in the callers list. While it may be obvious you intend the method to fire as a result of a notification you would still have to search for the notification listening code to find out if it existed and the <code>:(NSNotification *)</code> parameter is optional.</p>
+
+<p><img src="%20/images/callers_list.png" title="" alt="The callers menu" /></p>
 
 <p>Thirdly this method is more crash prone. If the observer is deallocated without you calling <code>[[NSNotificationCenter defaultCenter] removeObserver:self];</code> your app will crash. Admittedly in the scope of <code>NSNotificationCenter</code> observers this can be a good thing, alerting the programmer to a forgotten call to <code>removeObserver:</code> but its not a good bug to have slip through QA and land infront of users when theres an alternative that can fail silently.</p>
 
