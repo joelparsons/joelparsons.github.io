@@ -197,7 +197,7 @@
 
 <h2>So why is it better?</h2>
 
-<p>Finally heres why I think the new syntax is better. Firstly programmer error will not cause a crash for users. Arguably it would be better to know about programmer error but I think an a memory leak is a better experience than a crash for the end user. You define the code to execute where you listen for the notificaion. The Xcode refactor tools work properly with the code in the block. The Callers list also shows correctly for functions called from the block. Code is guaranteed to run on the queue you specify, unlike the older style of notificaion where your code would run on the same thread that posted the notification. I also like the way blocks can be offloaded to background threads with ease.</p>
+<p>Finally heres why I think the new syntax is better. Firstly programmer error will not cause a crash for users. Arguably it would be better to know about programmer error but I think an a memory leak is a better experience than a crash for the end user. If you wanted you could even put an <code>NSAssert</code> in the block to throw if weakself is nil. Assert macros are off by default for release builds so you can get the best of both worlds. Another benefit is you define the code to execute where you listen for the notificaion. The Xcode refactor tools work properly with the code in the block. The Callers list also shows correctly for functions called from the block. Code is guaranteed to run on the queue you specify, unlike the older style of notificaion where your code would run on the same thread that posted the notification. I also like the way blocks can be offloaded to background threads with ease.</p>
 
 <p>Its good to try new things so give the new Notification syntax a try today!</p>
 </div>
