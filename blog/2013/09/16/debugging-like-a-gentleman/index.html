@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Debugging Like a Gentleman - joelparsons.net</title>
+  <meta name="author" content="Joel Parsons">
+
+  
+  <meta name="description" content="Debugging effectively is quick to learn and easy to do.">
+  <meta name="keywords" content="lldbdebuggerdebuggingcommandsdebugbugsprintfprintpo">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joelparsons.github.io/blog/2013/09/16/debugging-like-a-gentleman">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="joelparsons.net" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1788810-15']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">joelparsons.net</a></h1>
+  
+    <h2>iOS Developer Stuff Every Monday</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joelparsons.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://about.me/joelparsons">About.me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Debugging Like a Gentleman</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-16T08:05:00+01:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I was listening to an <a href="http://edgecasesshow.com/062-primal-debugging-systems.html">episode</a> of the excellent podcast <a href="http://edgecasesshow.com">&ldquo;Edge Cases&rdquo;</a> by Andrew Pontious and Wolf Rentzsch titled <a href="http://edgecasesshow.com/062-primal-debugging-systems.html">&ldquo;Primal Debugging Systems&rdquo;</a> and they basically said that for all the debugging systems we have these days sometims they will just use <code>NSLog</code> statements to debug (Like an animal) because it was easier than getting information out of lldb. While sometimes an <code>NSLog</code> can be enlightening I have a few quick tips that can have you using lldb like a pro in very little time at all.</p>
+
+<!-- MORE -->
+
+
+<h2>Breakpoints</h2>
+
+<p>This post is all about the &ldquo;console&rdquo; in Xcode. The area of the Xcode interface that pops up when you run your app using the &ldquo;Run&rdquo; scheme which outputs your <code>NSLog</code> statements. This is all fine and dandy but when your code hits a breakpoint thats when the magic happens. The console turns into a prompt and is ready to accept commands. Before learning how to use the console you need to know how to set a breakpoint. Luckily its incredibly easy!</p>
+
+<p>A breakpoint is a place where the debugger will stop the code running when the path of execution gets to that point. From the breakpoint you can then inspect the runtime and even execute the next satements one by one, helping you to understand what is happening in your code. To set a breakpoint you find the line of code you would like the debugger to stop at and click next to that line in the gutter of the xcode editor window.</p>
+
+<p><img src="/images/debugging/breakpoint.png" title="" alt="An image of a blue breakpoint arrow" /></p>
+
+<p>You can also set breakpoints to stop code based on symbols you dont have in code you can edit, like framework symbols, by setting a symbolic breakpoint in the Xcode breakpoint navigator.</p>
+
+<p><img src="/images/debugging/navigator.png" title="" alt="The breakpoint navigator" /></p>
+
+<p>To set a symbolic breakpoint click the plus button in the lower left hand corner and click &ldquo;Add Symbolic Breakpoint&rdquo;. You then enter a symbol in the form suggested by the popover:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">//For instance methods:</span>
+</span><span class='line'>    <span class="o">-</span><span class="p">[</span><span class="n">NSClassname</span> <span class="nl">some:selector:with:args:</span><span class="p">]</span>
+</span><span class='line'>    <span class="c1">//For Class Methods</span>
+</span><span class='line'>    <span class="o">+</span><span class="p">[</span><span class="n">NSClassname</span> <span class="nl">someClassMethod:withArgs:</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/debugging/symbolicAdd.png" title="" alt="the box where you add a symbolic breakpoint" /></p>
+
+<p>You can also set a breakpont for exceptions, stopping the code at the point the exception is thrown rather than when the app terminates due to the exception being thrown. You do this from the same add button, instead selecting &ldquo;Add Exception Breakpoint&rdquo;.</p>
+
+<p><img src="/images/debugging/addbutton.png" title="" alt="the plus button for adding a breakpoint" /></p>
+
+<h2>po</h2>
+
+<p>So your code hits a breakpoint. What next? Xcode will show you all the variables in scope in the right hand &ldquo;Variables View&rdquo; of the debugger pane that pops up from the bottom. In Xcode 5 this view has gotten some really impressive quicklook features but thats all point and click. I&rsquo;m here to tell you about some commands that you can run in the debugger area. If your code is stopped at a breakpoint you will get the lldb prompt:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rather unassuming. The first command we will try is <code>po</code>. <code>po</code> prints out objective-c objects. Well technically it prints out the result of the <code>-(NSString*)description</code> method defined on <code>NSObject</code>. How useful that information is is up to the developer of the class you are printing. You can print any variables in scope by typing <code>po &lt;variablename&gt;</code></p>
+
+<p>Great! Most Apple classes have some great descriptions. You can also print the result of methods on your classes if those methods return Objective-C Objects. The debugger will call <code>-(NSString *)description</code> on the results of that method and print that. Example:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="p">[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nl">UIApplication:</span> <span class="mh">0xb074780</span><span class="o">&gt;</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not the most useful result. Lets chain some messages together and see what happens:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="p">[[[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="n">delegate</span><span class="p">]</span> <span class="n">window</span><span class="p">]</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nl">UIWindow:</span> <span class="mh">0xb2b3340</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">480</span><span class="p">);</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">RM</span><span class="o">+</span><span class="n">BM</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">UIWindowLayer:</span> <span class="mh">0xb2b3440</span><span class="o">&gt;&gt;</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Excellent! We&rsquo;ve printed the description of the main window. Heres a cool snippet that can help you debug your view heierarchy from anywhere you break in your app:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="p">[[[[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="n">delegate</span><span class="p">]</span> <span class="n">window</span><span class="p">]</span> <span class="n">recursiveDescription</span><span class="p">]</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nl">UIWindow:</span> <span class="mh">0xb2b3340</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">480</span><span class="p">);</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">RM</span><span class="o">+</span><span class="n">BM</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">UIWindowLayer:</span> <span class="mh">0xb2b3440</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIView:</span> <span class="mh">0xb07c6b0</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">20</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">460</span><span class="p">);</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">W</span><span class="o">+</span><span class="n">H</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07c710</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb07c740</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">460</span><span class="p">);</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">H</span><span class="p">;</span> <span class="n">userInteractionEnabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07c7a0</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIView:</span> <span class="mh">0xb07bb10</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="o">-</span><span class="mi">88</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">248</span><span class="p">);</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">W</span><span class="o">+</span><span class="n">TM</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb076bf0</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb077490</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">196</span> <span class="mi">51</span><span class="p">;</span> <span class="mi">102</span> <span class="mi">55</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07b630</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb076700</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb078ba0</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">254</span> <span class="mi">151</span><span class="p">;</span> <span class="mi">88</span> <span class="mi">30</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07cb20</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb078c00</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb079ae0</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">176</span> <span class="mi">130</span><span class="p">;</span> <span class="mi">66</span> <span class="mi">30</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07cce0</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb079b40</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb07aa00</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span> <span class="mi">179</span><span class="p">;</span> <span class="mi">64</span> <span class="mi">30</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">49</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07d3b0</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07aa60</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb077a10</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">37</span> <span class="mi">37</span><span class="p">;</span> <span class="mi">93</span> <span class="mi">43</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07c960</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb077a70</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIImageView:</span> <span class="mh">0xb07b990</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">49</span> <span class="mi">108</span><span class="p">;</span> <span class="mi">88</span> <span class="mi">30</span><span class="p">);</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">21</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">clipsToBounds</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">animations</span> <span class="o">=</span> <span class="p">{</span> <span class="n">transform</span><span class="o">=&lt;</span><span class="nl">CABasicAnimation:</span> <span class="mh">0xb07d570</span><span class="o">&gt;</span><span class="p">;</span> <span class="p">};</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07b9f0</span><span class="o">&gt;&gt;</span>
+</span><span class='line'>   <span class="o">|</span>    <span class="o">|</span> <span class="o">&lt;</span><span class="nl">UIView:</span> <span class="mh">0xb07c620</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">460</span><span class="p">);</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">W</span><span class="o">+</span><span class="n">H</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07c680</span><span class="o">&gt;&gt;</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Printing Pointers</h3>
+
+<p>So if we look at the last example, what if I want to print information about the layer of the window? I could totally do this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="p">[[[[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="n">delegate</span><span class="p">]</span> <span class="n">window</span><span class="p">]</span> <span class="n">layer</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OR I could take the pointer referenced in the previous printout and <code>po</code> that instead:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="mh">0xb2b3440</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nl">UIWindowLayer:</span><span class="mh">0xb2b3440</span><span class="p">;</span> <span class="n">position</span> <span class="o">=</span> <span class="n">CGPoint</span> <span class="p">(</span><span class="mi">160</span> <span class="mi">240</span><span class="p">);</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">CGRect</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">480</span><span class="p">);</span> <span class="n">delegate</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">UIWindow:</span> <span class="mh">0xb2b3340</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">480</span><span class="p">);</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">RM</span><span class="o">+</span><span class="n">BM</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">UIWindowLayer:</span> <span class="mh">0xb2b3440</span><span class="o">&gt;&gt;</span><span class="p">;</span> <span class="n">sublayers</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="nl">CALayer:</span> <span class="mh">0xb07c710</span><span class="o">&gt;</span><span class="p">);</span> <span class="n">clearsContext</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">backgroundColor</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">CGColor</span> <span class="mh">0xb2b3a00</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">CGColorSpace</span> <span class="mh">0xb279620</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">kCGColorSpaceDeviceRGB</span><span class="p">)]</span> <span class="p">(</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="p">)</span><span class="o">&gt;</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can even send messages to the object at that pointer like you would a named variable:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">po</span> <span class="p">[</span><span class="mh">0xb2b3440</span> <span class="n">delegate</span><span class="p">]</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nl">UIWindow:</span> <span class="mh">0xb2b3340</span><span class="p">;</span> <span class="n">frame</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">320</span> <span class="mi">480</span><span class="p">);</span> <span class="n">opaque</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span> <span class="n">autoresize</span> <span class="o">=</span> <span class="n">RM</span><span class="o">+</span><span class="n">BM</span><span class="p">;</span> <span class="n">layer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nl">UIWindowLayer:</span> <span class="mh">0xb2b3440</span><span class="o">&gt;&gt;</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also even aritrarily pause the execution of your app using the pause button (where the continue button is when your app hits a breakpoint) and <code>po</code> that variable, or some property of it without even needing a breakpoint! Just remember that pointers will probably change from run to run of your app.</p>
+
+<h3>Rinse and Repeat</h3>
+
+<p>Pretty short section but its worth mentioning that like in a terminal, hitting the up arrow will cycle through your debugger command history. That is all!</p>
+
+<h2>Printing Core Foundation Things</h2>
+
+<p>So this is all great until you want to print a <code>CGRect</code>, <code>CGPoint</code>, or even a <code>CGAffineTransform</code>. In fact any of the C-struct style objective-c things we pass around can also be printed out by the debugger really easily. The long command is <code>print</code> but you only need to type <code>p</code>. This time, however you need to tell the debugger what kind of struct you are expecting to get a decent output. Its easier to demo this feature than to explain it so I put a breakpoint inside <code>-(void)viewDidAppear:(BOOL)animated</code> of a <code>UIViewController</code>. Lets see what debugger magic I can work:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">p</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span> <span class="n">animated</span>
+</span><span class='line'><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span> <span class="n">$0</span> <span class="o">=</span> <span class="n">NO</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">p</span> <span class="p">(</span><span class="n">CGRect</span><span class="p">)</span> <span class="p">[[</span><span class="n">self</span> <span class="n">view</span><span class="p">]</span><span class="n">frame</span><span class="p">]</span>
+</span><span class='line'><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span> <span class="n">$1</span> <span class="o">=</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">460</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">p</span> <span class="p">(</span><span class="n">CGAffineTransform</span><span class="p">)</span> <span class="p">[[</span><span class="n">self</span> <span class="n">view</span><span class="p">]</span> <span class="n">transform</span><span class="p">]</span>
+</span><span class='line'><span class="p">(</span><span class="n">CGAffineTransform</span><span class="p">)</span> <span class="n">$2</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">tx</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="n">ty</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">(</span><span class="n">lldb</span><span class="p">)</span> <span class="n">p</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span> <span class="p">[[</span><span class="n">self</span> <span class="n">view</span><span class="p">]</span> <span class="n">alpha</span><span class="p">]</span>
+</span><span class='line'><span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span> <span class="n">$4</span> <span class="o">=</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Easy to use and awesome.</p>
+
+<p>Hopefully these simple tips can help make your life debugging easier!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Joel Parsons</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-16T08:05:00+01:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/commands/'>commands</a>, <a class='category' href='/blog/categories/debugger/'>debugger</a>, <a class='category' href='/blog/categories/lldb/'>lldb</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joelparsons.github.io/blog/2013/09/16/debugging-like-a-gentleman/" data-via="jackslash" data-counturl="http://joelparsons.github.io/blog/2013/09/16/debugging-like-a-gentleman/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/09/the-queue-observer-pattern/" title="Previous Post: The Queue Observer Pattern">&laquo; The Queue Observer Pattern</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/16/debugging-like-a-gentleman/">Debugging Like a Gentleman</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/09/the-queue-observer-pattern/">The Queue Observer Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/02/background-core-data-with-privatequeuecontext/">Background core data with privateQueueContext</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/26/code-runner/">Code Runner</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/25/the-boggle-board/">The Boggle Board Question</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/joelparsons">@joelparsons</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'joelparsons',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Joel Parsons -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
